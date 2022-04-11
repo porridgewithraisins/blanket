@@ -17,7 +17,7 @@ const Bucket = sequelize.define("Bucket", {
     name: {
         type: String,
         allowNull: false,
-    },
+    }
 });
 
 const File = sequelize.define("File", {
