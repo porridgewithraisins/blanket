@@ -25,7 +25,7 @@ const File = sequelize.define("File", {
         type: String,
         allowNull: false,
     },
-    filename: {
+    fileName: {
         type: String,
         allowNull: false,
     },
@@ -41,4 +41,5 @@ module.exports = {
     Project,
     Bucket,
     File,
+    sequelize
 };
