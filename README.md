@@ -1,7 +1,5 @@
 # blanket
 
-## backend as a service like supabase
-
 - /create
 - /projectname
 - /projectname/orbit/*      { expose orbit https://github.com/orbitdb/orbit-db }
