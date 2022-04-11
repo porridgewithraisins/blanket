@@ -7,6 +7,8 @@ function createBucket(req, res, next) {
     const bucket = await Bucket.create({
         name, projectId
     });
+
+    res.send({ "msg": "OK" });
 }
 
 function deleteBucket(req, res, next) {
@@ -18,4 +20,5 @@ function deleteBucket(req, res, next) {
     })
 
     bucket.destroy();
+    res.send({ "msg": "OK" });
 }
