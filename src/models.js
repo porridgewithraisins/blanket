@@ -36,3 +36,9 @@ Bucket.belongsTo(Project);
 
 Bucket.hasMany(File);
 File.belongsTo(Bucket);
+
+module.exports = {
+    Project,
+    Bucket,
+    File,
+};
