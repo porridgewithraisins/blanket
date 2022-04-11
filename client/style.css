@@ -63,6 +63,10 @@ nav {
     cursor: pointer;
 }
 
+nav a,a:link,a:visited {
+    color: inherit;
+}
+
 
 @media screen and (max-aspect-ratio: 1/1) {
     nav {
