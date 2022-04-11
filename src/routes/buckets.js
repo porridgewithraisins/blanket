@@ -1,24 +1,20 @@
-const { Bucket } = require('../models');
+const { prisma } = require("../db");
 
-function createBucket(req, res, next) {
+async function createBucket(req, res, next) {
     const { name } = req.body;
-    const { projectId } = req.params;
+    const { project_id } = req.params;
 
-    const bucket = await Bucket.create({
-        name, projectId
-    });
+    const bucket = await prisma.bucket.create({ data: { name, projectId: Number(project_id) } });
 
-    res.send({ "msg": "OK" });
+    res.send({ id: bucket.id });
 }
 
-function deleteBucket(req, res, next) {
-    const { name } = req.body;
-    const { projectId } = req.params;
+async function deleteBucket(req, res, next) {
+    const { project_id } = req.params;
 
-    const bucket = await Bucket.findOne({
-        name, projectId
-    });
+    await prisma.bucket.delete({ where: { id: Number(project_id) } });
 
-    bucket.destroy();
-    res.send({ "msg": "OK" });
+    res.send({ msg: "OK" });
 }
+
+module.exports = { createBucket, deleteBucket };

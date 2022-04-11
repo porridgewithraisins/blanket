@@ -1,12 +1,12 @@
 const ethers = require("ethers");
 const ipfsClient = require("ipfs-http-client");
 const fs = require("fs/promises");
-const { File } = require("../models");
-
+const { prisma } = require("../db");
 module.exports = {
     async addFile(req, res, next) {
         const file = req.files.file;
-        const { fileName, bucketId } = req.body;
+        const { fileName } = req.body;
+        const { bucket_id } = req.params;
 
         const filePath = "files/" + fileName;
 
@@ -18,7 +18,7 @@ module.exports = {
 
         const cid = fileDetail.cid.toString().slice();
 
-        await File.create({ cid, fileName, BucketId: bucketId });
+        await prisma.file.create({ data: { cid, name: fileName, bucketId: Number(bucket_id) } });
 
         res.json({ cid });
     },
