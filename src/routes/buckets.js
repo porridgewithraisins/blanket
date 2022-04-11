@@ -17,7 +17,7 @@ function deleteBucket(req, res, next) {
 
     const bucket = await Bucket.findOne({
         name, projectId
-    })
+    });
 
     bucket.destroy();
     res.send({ "msg": "OK" });

@@ -1,3 +1,5 @@
+const {Project} = require('../models');
+
 const createProject = (req, res) => {
   const { name, description } = req.body;
   const project = new Project({
