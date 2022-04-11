@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
@@ -11,7 +11,6 @@ const Project = sequelize.define("Project", {
         allowNull: false,
     },
     description: { type: String },
-    crust_info: { type: String },
 });
 
 const Bucket = sequelize.define("Bucket", {
