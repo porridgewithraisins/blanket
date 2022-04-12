@@ -46,6 +46,10 @@ const deleteProject = async (req, res) => {
     res.send({ msg: "OK" });
 };
 
+const payForProject = async (req, res) => {
+    
+}
+
 module.exports = {
     createProject,
     readProject,
