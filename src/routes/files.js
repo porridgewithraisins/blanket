@@ -25,7 +25,9 @@ module.exports = {
             data: { cid, name: fileName, bucketId: Number(bucket_id) },
         });
 
-        const { seed_phrase } = await prisma.project.findUnique({ where: { id: project_id } });
+        const { seed_phrase } = await prisma.project.findUnique({
+            where: { id: Number(project_id) },
+        });
 
         await placeCrustOrder(cid, size, seed_phrase);
 
