@@ -8,7 +8,7 @@ const {
     readProject,
     updateProject,
 } = require("./routes/project");
-const { createBucket, deleteBucket, allBuckets, readBucket } = require("./routes/buckets");
+const { createBucket, deleteBucket, updateBucket, allBuckets, readBucket } = require("./routes/buckets");
 const { Router } = require("express");
 
 const app = express();

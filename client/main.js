@@ -1,4 +1,5 @@
 import cfa from "https://esm.sh/cf-alert";
+import { ethers } from "https://esm.sh/ethers";
 
 const hamburger = document.querySelector("#hamburger");
 const nav = document.querySelector("nav");
@@ -12,6 +13,17 @@ const seedPhrase = document.querySelector("#seed-phrase");
 const bucketIdField = document.querySelector("#bucket-id");
 const projectIdField = document.querySelector("#file-form-project-id");
 const toUpload = document.querySelector("#to-upload");
+const web3signIn = document.querySelector("#web3-sign-in");
+
+web3signIn.addEventListener("click", async () => {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    document.getElementById("address").innerHTML = address;
+});
+
 
 newProjForm.onsubmit = async e => {
     e.preventDefault();
