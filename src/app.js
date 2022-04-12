@@ -1,23 +1,47 @@
 const express = require("express");
 const multer = require("multer");
 const { addFile } = require("./routes/files");
-const { createProject, deleteProject } = require("./routes/project");
-const { createBucket, deleteBucket } = require("./routes/buckets");
+const {
+    createProject,
+    deleteProject,
+    allProjects,
+    readProject,
+    updateProject,
+} = require("./routes/project");
+const { createBucket, deleteBucket, allBuckets, readBucket } = require("./routes/buckets");
+const { Router } = require("express");
 
 const app = express();
 
 const upload = multer({
-    dest: './uploads/',
+    dest: "./uploads/",
 });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/", express.static("client"));
 
-app.post("/", createProject);
-app.delete("/:project_id", deleteProject);
-app.post("/:project_id", createBucket);
-app.delete("/:project_id/:bucket_id", deleteBucket);
-app.post("/:project_id/:bucket_id", upload.single('file'), addFile);
+const projectRouter = new Router();
+
+projectRouter
+    .get("/", allProjects)
+    .post("/", createProject)
+    .get("/:project_id", readProject)
+    .put("/:project_id", updateProject)
+    .delete("/:project_id", deleteProject)
+    .get("/:project_id/buckets", allBuckets)
+    .post("/:project_id/buckets", createBucket)
+    .get("/:project_id/buckets/:bucket_id", readBucket)
+    .put("/:project_id/buckets/:bucket_id", updateBucket)
+    .delete("/:project_id/buckets/:bucket_id", deleteBucket)
+
+    .post("/:project_id/buckets/:bucket_id", addFile)
+
+    .get("/:project_id/kv")
+    .get("/:project_id/kv/:key")
+    .put("/:project_id/kv") //{ key, value }
+    .delete("/:project_id/kv/:key");
+
+app.use("/api/projects", projectRouter);
 
 module.exports = app;
