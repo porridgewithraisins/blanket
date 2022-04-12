@@ -13,11 +13,11 @@ const seedPhrase = document.querySelector("#seed-phrase");
 const bucketIdField = document.querySelector("#bucket-id");
 const projectIdField = document.querySelector("#file-form-project-id");
 const toUpload = document.querySelector("#to-upload");
-const web3Login = document.querySelector("#signIn");
+const web3signIn = document.querySelector("#web3-sign-in");
 
-web3Login.addEventListener("click", async () => {
-    console.log("clicked");
-    const provider = new ethers.providers.Web3Provider(window.web3.currentProvider);
+web3signIn.addEventListener("click", async () => {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
