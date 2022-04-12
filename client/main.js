@@ -1,3 +1,5 @@
+import cfa from "https://esm.sh/cf-alert";
+
 const hamburger = document.querySelector("#hamburger");
 const nav = document.querySelector("nav");
 
@@ -14,7 +16,7 @@ window.addEventListener("resize", () => {
     window.innerWidth / window.innerHeight > 1 ? "flex" : "none";
 });
 
-const spargleRequest = (method, url, data) => {
+const spargleRequest = (url, data, method = 'POST') => {
   return fetch(url, {
     method,
     headers: {
@@ -29,23 +31,5 @@ const submitForm = (ids, method, url) => {
   const body = Object.fromEntries(
     ids.map((id) => [id, document.getElementById(id).value])
   );
-  return spargleRequest(method, url, body);
+  return spargleRequest(url, body, method);
 };
-
-/* const submitFile = () => {
-  const f = new FormData();
-  f.append("fileName", document.getElementById("fileName").value);
-  f.append("file", document.getElementById("myfile").files[0]);
-  return fetch(
-    `/${document.getElementById("project_id").value}/${
-      document.getElementById("bucket_id").value
-    }`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: f,
-    }
-  );
-}; */
