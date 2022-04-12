@@ -3,41 +3,31 @@ const ipfsClient = require("ipfs-http-client");
 const fs = require("fs/promises");
 const { prisma } = require("../db");
 
-const polkadot = require("@polkadot/api");
 const crustio = require("@crustio/type-definitions");
-// const keyring = require("@polkadot/keyring");
-const keyringPair = require("@polkadot/keyring/pair");
 
 const { waitReady } = require("@polkadot/wasm-crypto");
-const { Keyring, WsProvider } = require("@polkadot/api");
-const { resolve } = require("path");
+const { Keyring, WsProvider, ApiPromise } = require("@polkadot/api");
 
 const crustChainEndpoint = "wss://rpc.crust.network";
-const Wsprovider = new polkadot.WsProvider(crustChainEndpoint);
+const wsProvider = new WsProvider(crustChainEndpoint);
 
 module.exports = {
-    async addFile(req, res, next) {
-        const file = req.files.file;
+    async addFile(req, res) {
+        const file = req.file;
         const { fileName } = req.body;
         const { bucket_id, project_id } = req.params;
 
-        const filePath = "files/" + fileName;
+        const { cid, size } = await uploadFile(file.path);
 
-        await file.mv(filePath);
+        await fs.unlink(file.path);
 
-        const fileDetail = await uploadFile(filePath);
-
-        await fs.unlink(filePath);
-
-        const cid = fileDetail.cid.toString().slice();
-
-        await prisma.file.create({ data: { cid, name: fileName, bucketId: Number(bucket_id) } });
-
-        const { seed_phrase } = await prisma.project.findUnique({
-            where: { id: Number(project_id) },
+        await prisma.file.create({
+            data: { cid, name: fileName, bucketId: Number(bucket_id) },
         });
 
-        await placeCrustOrder(cid, fileDetail.cumulativeSize, seed_phrase);
+        const { seed_phrase } = await prisma.project.findUnique({ where: { id: project_id } });
+
+        await placeCrustOrder(cid, size, seed_phrase);
 
         res.json({ cid });
     },
@@ -63,22 +53,19 @@ async function uploadFile(file_path) {
         path: file_path,
         content: fileBuffer,
     });
-    console.log(cid);
 
     const fileStat = await ipfs.files.stat("/ipfs/" + cid);
-    console.log("FILESTAT");
-    console.log(fileStat);
 
     return {
-        cumulativeSize: fileStat.cumulativeSize,
-        cid: fileStat.cid,
+        cid: fileStat.cid.toString().slice(),
+        size: fileStat.cumulativeSize,
     };
 }
 
 async function placeCrustOrder(cid, fileSize, seed_phrase) {
     await waitReady();
-    const api = new polkadot.ApiPromise({
-        provider: WsProvider,
+    const api = new ApiPromise({
+        provider: wsProvider,
         typesBundle: crustio.typesBundleForPolkadot,
     });
 

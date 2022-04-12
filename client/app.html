@@ -15,6 +15,9 @@
         <nav>
             <ul class="styleless">
                 <li>New project</li>
+                <input id="name" type="text" placeholder="Enter Name">
+                <input id="seed_phrase" type="text" placeholder="Enter Seed Phrase">
+                <input id="newProject" type="submit" onclick="submitForm(['name' , 'seed_phrase'] , 'POST' , '/')">
             </ul>
         </nav>
         <div id="content">
