@@ -2,63 +2,87 @@ const ethers = require("ethers");
 const ipfsClient = require("ipfs-http-client");
 const fs = require("fs/promises");
 const { prisma } = require("../db");
+
+const crustio = require("@crustio/type-definitions");
+
+const { waitReady } = require("@polkadot/wasm-crypto");
+const { Keyring, WsProvider, ApiPromise } = require("@polkadot/api");
+
+const crustChainEndpoint = "wss://rpc.crust.network";
+const wsProvider = new WsProvider(crustChainEndpoint);
+
 module.exports = {
-  async addFile(req, res, next) {
-    console.log(req.file);
-    if (!req.file) {
-      res.status(400).send({ msg: "No files were uploaded." });
-      return;
-    }
-    const file = req.file;
-    const { fileName } = req.body;
-    const { bucket_id } = req.params;
+    async addFile(req, res) {
+        const file = req.file;
+        const { fileName } = req.body;
+        const { bucket_id, project_id } = req.params;
 
-    const fileDetail = await addFileAuth(file.path);
+        const { cid, size } = await uploadFile(file.path);
 
-    await fs.unlink(file.path);
+        await fs.unlink(file.path);
 
-    const cid = fileDetail.cid.toString().slice();
+        await prisma.file.create({
+            data: { cid, name: fileName, bucketId: Number(bucket_id) },
+        });
 
-    await prisma.file.create({
-      data: { cid, name: fileName, bucketId: Number(bucket_id) },
-    });
-    console.log(cid);
-    res.json({ cid });
-  },
+        const { seed_phrase } = await prisma.project.findUnique({ where: { id: project_id } });
+
+        await placeCrustOrder(cid, size, seed_phrase);
+
+        res.json({ cid });
+    },
 };
 
-async function addFileAuth(file_path) {
-  const pair = ethers.Wallet.createRandom();
-  console.log(pair);
-  const sig = await pair.signMessage(pair.address);
-  console.log(sig);
-  const authHeaderRaw = `eth-${pair.address}:${sig}`;
-  console.log(authHeaderRaw);
-  const authHeader = Buffer.from(authHeaderRaw).toString("base64");
-  console.log(authHeader);
-  const ipfsW3GW = "https://crustipfs.xyz";
+async function uploadFile(file_path) {
+    const pair = ethers.Wallet.createRandom();
+    const sig = await pair.signMessage(pair.address);
+    const authHeaderRaw = `eth-${pair.address}:${sig}`;
+    const authHeader = Buffer.from(authHeaderRaw).toString("base64");
+    const ipfsW3GW = "https://crustipfs.xyz";
 
-  const fileBuffer = await fs.readFile(file_path);
+    const fileBuffer = await fs.readFile(file_path);
 
-  const ipfs = ipfsClient.create({
-    url: `${ipfsW3GW}/api/v0`,
-    headers: {
-      authorization: `Basic ${authHeader}`,
-    },
-  });
+    const ipfs = ipfsClient.create({
+        url: `${ipfsW3GW}/api/v0`,
+        headers: {
+            authorization: `Basic ${authHeader}`,
+        },
+    });
 
-  const { cid } = await ipfs.add({
-    path: file_path,
-    content: fileBuffer,
-  });
-  console.log(cid);
+    const { cid } = await ipfs.add({
+        path: file_path,
+        content: fileBuffer,
+    });
 
-  const fileStat = await ipfs.files.stat("/ipfs/" + cid);
-  console.log("FILESTAT");
-  console.log(fileStat);
+    const fileStat = await ipfs.files.stat("/ipfs/" + cid);
 
-  return {
-    cumulativeSize: fileStat.cumulativeSize,
-    cid: fileStat.cid,
-  };
+    return {
+        cid: fileStat.cid.toString().slice(),
+        size: fileStat.cumulativeSize,
+    };
+}
+
+async function placeCrustOrder(cid, fileSize, seed_phrase) {
+    await waitReady();
+    const api = new ApiPromise({
+        provider: wsProvider,
+        typesBundle: crustio.typesBundleForPolkadot,
+    });
+
+    await api.isReady;
+
+    const transaction = api.tx.market.placeStorageOrder(cid, fileSize);
+
+    const keyring = new Keyring({ type: "sr25519" });
+
+    const krp = keyring.addFromSeed(new TextEncoder("utf-8").encode(seed_phrase));
+
+    await api.isReadyOrError;
+
+    return transaction.signAndSend(krp, ({ events = [], status }) => {
+        if (!status.isInBlock) return;
+        if (events.some(event => event.event.method === "ExtrinsicSuccess")) {
+            console.log("StorageOrderPlaced");
+        }
+    });
 }
