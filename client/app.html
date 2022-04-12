@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blanket - dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cfa.css">
+</head>
+
+<body>
+    <div id="body-wrapper">
+        <nav>
+            <ul class="styleless">
+                <li><a href="#new-project-form">New project</a></li>
+            </ul>
+        </nav>
+        <div id="content">
+            <div id="header">
+                <h1>blanket</h1>
+                <div id="hamburger"><svg viewBox="0 0 100 80" width="40" height="40" fill="white">
+                        <rect width="100" height="20" rx="8"></rect>
+                        <rect y="30" width="100" height="20" rx="8"></rect>
+                        <rect y="60" width="100" height="20" rx="8"></rect>
+                    </svg></div>
+            </div>
+
+            <form id="new-project-form" class="bl-form">
+                <fieldset>
+                    <legend>Create a new project</legend>
+                    <input required id="new-proj-name" type="text" placeholder="Enter Name">
+                    <input required id="seed-phrase" type="text" placeholder="Enter Seed Phrase">
+                    <input type="submit" value="Create">
+                </fieldset>
+            </form>
+
+            <form id="new-bucket-form" class="bl-form">
+                <fieldset>
+                    <legend>Create a new bucket</legend>
+                    <input required id="new-bucket-name" type="text" placeholder="Enter Name">
+                    <input required id="bucket-form-project-id" type="text" placeholder="Enter Project ID">
+                    <input type="submit" value="Create">
+                </fieldset>
+            </form>
+
+            <form id='new-file-form' enctype="multipart/form-data" class="bl-form" method="POST">
+                <fieldset>
+                    <legend>Upload a file to an existing bucket</legend>
+                    <input required type="text" id="bucket-id" name="bucket" placeholder="Bucket ID">
+                    <input required type="text" id="file-form-project-id" name="project" placeholder="Project ID">
+                    <input required type="text" id="file-name" name="file-name" placeholder="Enter File Name">
+                    <input required type="file" id="to-upload" name="file">
+                    <input type="submit" value="Upload">
+                </fieldset>
+            </form>
+
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>
