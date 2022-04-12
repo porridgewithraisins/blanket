@@ -63,10 +63,22 @@ nav {
     cursor: pointer;
 }
 
-nav a,a:link,a:visited {
+nav a,
+a:link,
+a:visited {
     color: inherit;
 }
 
+form.bl-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 30ch;
+    margin: 1rem;
+}
+
+form.bl-form>* {
+    margin: 0.5rem;
+}
 
 @media screen and (max-aspect-ratio: 1/1) {
     nav {
