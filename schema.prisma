@@ -7,12 +7,20 @@ generator client {
     provider = "prisma-client-js"
 }
 
+model User {
+    id       Int       @id @default(autoincrement())
+    address  String
+    projects Project[]
+}
+
 model Project {
     id          Int      @id @default(autoincrement())
     name        String
     description String?
     buckets     Bucket[]
     seed_phrase String
+    User        User?    @relation(fields: [userId], references: [id])
+    userId      Int?
 }
 
 model Bucket {
