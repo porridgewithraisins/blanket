@@ -16,6 +16,7 @@ async function readBucket(req, res, next) {
 
     const bucket = await prisma.bucket.findFirst({
         where: { id: Number(bucket_id), projectId: Number(project_id) },
+        include: { files: true },
     });
 
     res.send(bucket);
