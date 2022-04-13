@@ -20,7 +20,8 @@ web3signIn.addEventListener("click", async () => {
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
-    document.getElementById("eth-address").innerHTML = address;
+    document.getElementById("eth-address").innerHTML = address.slice(0, 7) + "..." + address.slice(address.length - 3);
+    web3signIn.innerHTML = 'Signed In';
 });
 
 newProjForm.onsubmit = async e => {
