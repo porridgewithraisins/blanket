@@ -1,7 +1,7 @@
 const IPFS = require("ipfs");
 const OrbitDB = require("orbit-db");
 
-const ipfs = new IPFS();
+const ipfs = IPFS.create();
 const orbit = await OrbitDB.createInstance(ipfs);
 
 class Repository {
