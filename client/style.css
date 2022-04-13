@@ -52,7 +52,23 @@ nav {
     align-items: center;
     width: 100%;
     user-select: none;
-    font-size: 30px;
+}
+
+#header>h1 {
+    font-size: 2rem;
+}
+
+#sign-in-widget {
+    font-weight: bold;
+    margin: 0.4rem;
+    font-size: 1.2rem;
+    margin-left: auto;
+    overflow: hidden;
+}
+
+#eth-address {
+    max-width: 12ch;
+    text-overflow: ellipsis;
 }
 
 #hamburger {
@@ -80,9 +96,10 @@ form.bl-form {
     margin: 1rem;
 }
 
-form.bl-form > fieldset > * {
-	margin: 0.5rem;
-	font-size: 17.5px;
+form.bl-form>fieldset>* {
+    margin: 0.5rem;
+    font-size: 17.5px;
+    display: block;
 }
 
 @media screen and (max-aspect-ratio: 1/1) {
@@ -100,5 +117,9 @@ form.bl-form > fieldset > * {
 
     #hamburger {
         display: block;
+    }
+
+    #sign-in-widget {
+        margin-left: 0.4rem;
     }
 }

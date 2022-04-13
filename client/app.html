@@ -25,11 +25,13 @@
                         <rect y="30" width="100" height="20" rx="8"></rect>
                         <rect y="60" width="100" height="20" rx="8"></rect>
                     </svg></div>
+
+                <div id="sign-in-widget">
+                    <a href="javascript:void(0)" id="web3-sign-in">Sign In</a>
+                    <div id="eth-address"></div>
+                </div>
             </div>
-            <div>
-                <button id="web3-sign-in">Sign In With MetaMask</button>
-                <div id="address"></div>
-            </div>
+            <h2>Your projects</h2>
             <form id="new-project-form" class="bl-form">
                 <fieldset>
                     <legend>Create a new project</legend>
@@ -38,12 +40,16 @@
                     <input type="submit" value="Create">
                 </fieldset>
             </form>
-
+            <ul id="project-list"></ul>
+            <h2>Buckets</h2>
             <form id="new-bucket-form" class="bl-form">
                 <fieldset>
                     <legend>Create a new bucket</legend>
+
+                    <select required id="bucket-form-project-id">
+                        <option selected disabled>Select project ID</option>
+                    </select>
                     <input required id="new-bucket-name" type="text" placeholder="Enter Name">
-                    <input required id="bucket-form-project-id" type="text" placeholder="Enter Project ID">
                     <input type="submit" value="Create">
                 </fieldset>
             </form>
@@ -51,14 +57,18 @@
             <form id='new-file-form' enctype="multipart/form-data" class="bl-form" method="POST">
                 <fieldset>
                     <legend>Upload a file to an existing bucket</legend>
-                    <input required type="text" id="bucket-id" name="bucket" placeholder="Bucket ID">
-                    <input required type="text" id="file-form-project-id" name="project" placeholder="Project ID">
+                    <select required id="file-form-project-id">
+                        <option selected disabled>Select project ID</option>
+                    </select>
+                    <select required id="bucket-id">
+                        <option selected disabled>Select bucket ID</option>
+                    </select>
                     <input required type="text" id="file-name" name="file-name" placeholder="Enter File Name">
                     <input required type="file" id="to-upload" name="file">
                     <input type="submit" value="Upload">
                 </fieldset>
             </form>
-
+            <h2></h2>
         </div>
     </div>
 
