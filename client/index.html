@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>blanket - home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.min.css">
 </head>
 
 <body>
@@ -14,7 +14,6 @@
         <nav>
             <ul class="styleless">
                 <li><a href='./index.html'>Home</a></li>
-                <li><a href='./tech.html'>Technology</a></li>
                 <li><a href='./app.html'>Get Started</a></li>
             </ul>
         </nav>
@@ -25,14 +24,41 @@
                         <rect width="100" height="20" rx="8"></rect>
                         <rect y="30" width="100" height="20" rx="8"></rect>
                         <rect y="60" width="100" height="20" rx="8"></rect>
-                    </svg></div>
-                <button style="color: aqua;" id="signIn">Connect To MetaMask</button>
-                <div id="address"></div>
+                    </svg>
+                </div>
+                <!--                 <button style="color: black;" id="signIn">Connect To MetaMask</button>
+                <div id="address">
+                </div> -->
+            </div>
+            <div id="page-content">
+                <p>A Firebase and Supabase alternative that uses decentralised technologies to preserve the same
+                    developer friendly experience, but with the added power and flexibility of Web 3.0.</p>
+                <p>Compared to AWS ($0.025 per GB), storing files on P2P networks like IPFS is dirt cheap ($ 0.000005
+                    /GB/Year) as well as tolerant to failure of one or more nodes. Only if every node in the world stops
+                    working will the network be offline</p>
+                <p>We have 3 main products:
+                <ul>
+                    <li>
+                        Pay is our Polygon-based payments service. We leverage the security of modern cryptography to
+                        implement a secure and easy way for developers to collect payments in cryptocurrencies from
+                        their users.
+                    </li>
+                    <li>
+                        Buckets is our Crust-based object storage solution, which stores files in 'buckets' (containers
+                        for objects).
+                    </li>
+                    <li>
+                        Every blanket app comes pre-provisioned with a decentralized IPFS based database solution in the
+                        form of OrbitDB. Orbit provides many different services for cloud data storage. Because it is
+                        backed by IPFS, it ensures that the data is censorship resistant and highly redundant.
+                    </li>
+                </ul>
+                </p>
             </div>
         </div>
     </div>
 
-    <script type="module" src="main.js"></script>
+    <script type="module" src="main.min.js"></script>
 </body>
 
 </html>
