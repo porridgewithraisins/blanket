@@ -18,14 +18,14 @@ module.exports.kvGet = (req, res, next) => {
         val: db.get(key)
     });
 }
-module.exports.kvPut = (req, res, next) => {
+module.exports.kvPut = async (req, res, next) => {
     const db = repo.getDb(req.params.project_id);
     const { key, val } = req.body;
     await db.put(key, val);
     res.send({ msg: "OK" });
 
 }
-module.exports.kvDel = (req, res, next) => {
+module.exports.kvDel = async (req, res, next) => {
     const db = repo.getDb(req.params.project_id);
     const { key } = req.params;
     const mh = await db.del(key);
