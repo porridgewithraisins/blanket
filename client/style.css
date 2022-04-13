@@ -4,30 +4,17 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #303030;
+    background-color: #2E3440;
     color: #fff;
     font-family: monospace;
-}
-
-body {
     overflow: hidden;
-}
-
-ul.styleless>li {
-    list-style: none;
-    margin-left: 0;
-}
-
-ul.styleless {
-    margin-block-start: 0;
-    padding-inline-start: 0;
-    padding-left: 0;
-    margin-block-end: 0;
+    font-size: 1.08rem;
 }
 
 nav {
-    width: 30%;
-    background-color: rgb(13, 156, 13);
+    width: 20%;
+    background-color: #81A1C1;
+    color: #2E3440;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -35,6 +22,23 @@ nav {
     align-items: center;
     font-size: 1.5rem;
     line-height: 1.6;
+    font-family: 'Source Sans Pro';
+    font-weight: 600;
+    gap: 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    border: 4px solid;
+    border-radius: 0.75rem;
+    width: 85%;
+    text-align: center;
+    padding: 0.5rem;
+    transition-duration: 0.1s;
+}
+
+nav li {
+    margin: 1.5rem;
 }
 
 #body-wrapper {
@@ -45,7 +49,7 @@ nav {
 }
 
 #content {
-    width: 70%;
+    width: 80%;
     overflow-y: auto;
     padding: 1.5rem;
 }
@@ -55,6 +59,24 @@ nav {
     align-items: center;
     width: 100%;
     user-select: none;
+    margin-bottom: 2rem;
+}
+
+#header>h1 {
+    font-size: 2rem;
+}
+
+#sign-in-widget {
+    font-weight: bold;
+    margin: 0.4rem;
+    font-size: 1.2rem;
+    margin-left: auto;
+    overflow: hidden;
+}
+
+#eth-address {
+    max-width: 12ch;
+    text-overflow: ellipsis;
 }
 
 #hamburger {
@@ -63,21 +85,124 @@ nav {
     cursor: pointer;
 }
 
+#page-content {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-left: 2rem;
+}
+
 nav a,
 a:link,
 a:visited {
     color: inherit;
 }
 
+legend {
+    font-weight: bold;
+}
+
 form.bl-form {
     display: flex;
     flex-direction: column;
-    max-width: 45ch;
+    max-width: 60ch;
     margin: 1rem;
+}
+
+form.bl-form>fieldset {
+    min-width: 40ch;
 }
 
 form.bl-form>fieldset>* {
     margin: 0.5rem;
+    font-size: 1.15rem;
+    display: block;
+}
+
+input[type=text],
+select {
+    border: 2px solid transparent;
+    color: white;
+    background-color: transparent;
+    border-bottom: 2px solid gray;
+    padding: 0.4rem;
+}
+
+option {
+    color: initial;
+}
+
+input[type=text]:focus,
+select:focus,
+input[type=submit][type=submit]:focus {
+    border: 2px solid white;
+    outline: none;
+}
+
+input[type=submit][type=submit] {
+    background-color: transparent;
+    border: 2px solid grey;
+    color: white;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 2rem;
+    padding: 0.4rem;
+}
+
+#auth-gated {
+    display: none;
+}
+
+input[type=file] {
+    height: 0;
+    opacity: 0;
+}
+
+label[for="to-upload"] {
+    font-family: inherit;
+    width: 20ch;
+    text-align: center;
+    background-color: gray;
+    padding: 0.75rem;
+}
+
+label.has-file {
+    background-color: white;
+    color: black;
+}
+
+h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media not all and (hover: none) {
+    label[for="to-upload"]:hover:not(.has-file) {
+        background-color: #999;
+    }
+
+    input[type=submit]:hover {
+        border-color: #aaa;
+    }
+
+    label[for="to-upload"]:hover {
+        cursor: pointer;
+    }
+
+
+    input[type=text]:hover:not(:focus),
+    select:hover:not(:focus) {
+        border-bottom-color: #aaa;
+    }
+
+    select:hover {
+        cursor: pointer;
+    }
+
+    nav a:hover {
+        color: white;
+        border-color: white;
+    }
 }
 
 @media screen and (max-aspect-ratio: 1/1) {
@@ -95,5 +220,9 @@ form.bl-form>fieldset>* {
 
     #hamburger {
         display: block;
+    }
+
+    #sign-in-widget {
+        margin-left: 0.4rem;
     }
 }
