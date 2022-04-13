@@ -190,8 +190,8 @@ h2 {
     }
 
 
-    input[type=text]:hover,
-    select:hover {
+    input[type=text]:hover:not(:focus),
+    select:hover:not(:focus) {
         border-bottom-color: #aaa;
     }
 
