@@ -18,7 +18,11 @@ const {
 const { Router } = require("express");
 const { kvAll, kvGet, kvPut, kvDel, createDb } = require("./routes/orbit");
 
+const cors = require("cors");
+
 const app = express();
+
+app.use(cors());
 
 const upload = multer({
     dest: "./uploads/",
