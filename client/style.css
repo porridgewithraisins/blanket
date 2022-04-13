@@ -176,6 +176,11 @@ h2 {
     margin-bottom: 1.5rem;
 }
 
+input,
+select {
+    font-family: "Source Sans Pro";
+}
+
 @media not all and (hover: none) {
     label[for="to-upload"]:hover:not(.has-file) {
         background-color: #999;
