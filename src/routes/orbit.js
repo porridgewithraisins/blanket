@@ -4,40 +4,35 @@
  * kv put
  * kv delete
  */
-const { orbit } = require('../orbit');
+const { repo } = require('../orbit');
 
-const genDbName = (user, projectId) => {
-    // todo: replace with deterministic db name generator
-    return `${user}.${projectId}`;
-}
-
-export const createDb = async (req, res, next) => {
+module.exports.createDb = async (req, res, next) => {
     const { project_id } = req.params;
-    await orbit.keyvalue(genDbName('user', project_id));
+    await repo.init(project_id);
     res.send({ msg: "OK" });
 }
-export const kvGet = (req, res, next) => {
-    const db = await orbit.keyvalue(genDbName('user', project_id));
-    const { key } = req.body;
+module.exports.kvGet = (req, res, next) => {
+    const db = repo.getDb(req.params.project_id);
+    const { key } = req.params;
     res.send({
         val: db.get(key)
     });
 }
-export const kvPut = (req, res, next) => {
-    const db = await orbit.keyvalue(genDbName('user', project_id));
+module.exports.kvPut = async (req, res, next) => {
+    const db = repo.getDb(req.params.project_id);
     const { key, val } = req.body;
     await db.put(key, val);
     res.send({ msg: "OK" });
 
 }
-export const kvDel = (req, res, next) => {
-    const db = await orbit.keyvalue(genDbName('user', project_id));
-    const { key } = req.body;
+module.exports.kvDel = async (req, res, next) => {
+    const db = repo.getDb(req.params.project_id);
+    const { key } = req.params;
     const mh = await db.del(key);
     res.send({ msg: "OK", mh });
 }
 
-export const kvAll = (req, res, next) => {
-    const db = await orbit.keyvalue(genDbName('user', project_id));
+module.exports.kvAll = (req, res, next) => {
+    const db = repo.getDb(req.params.project_id);
     res.send({ all: db.all });
 }

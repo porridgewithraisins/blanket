@@ -8,14 +8,18 @@
     <title>blanket - dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cfa.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
     <div id="body-wrapper">
         <nav>
-            <ul class="styleless">
-                <li><a href="#new-project-form">New project</a></li>
-            </ul>
+            <a href="#manage-projects">Manage projects</a>
+            <a href="#buckets">Buckets</a>
         </nav>
         <div id="content">
             <div id="header">
@@ -25,40 +29,80 @@
                         <rect y="30" width="100" height="20" rx="8"></rect>
                         <rect y="60" width="100" height="20" rx="8"></rect>
                     </svg></div>
+
+                <div id="sign-in-widget">
+                    <a href="javascript:void(0)" id="web3-sign-in">Sign In</a>
+                    <div id="eth-address"></div>
+                </div>
             </div>
-            <div>
-                <button id="web3-sign-in">Sign In With MetaMask</button>
-                <div id="address"></div>
+
+            <div id="auth-gate">
+                You need to be logged in to access the dashboard.
             </div>
-            <form id="new-project-form" class="bl-form">
-                <fieldset>
-                    <legend>Create a new project</legend>
-                    <input required id="new-proj-name" type="text" placeholder="Enter Name">
-                    <input required id="seed-phrase" type="text" placeholder="Enter Seed Phrase">
-                    <input type="submit" value="Create">
-                </fieldset>
-            </form>
 
-            <form id="new-bucket-form" class="bl-form">
-                <fieldset>
-                    <legend>Create a new bucket</legend>
-                    <input required id="new-bucket-name" type="text" placeholder="Enter Name">
-                    <input required id="bucket-form-project-id" type="text" placeholder="Enter Project ID">
-                    <input type="submit" value="Create">
-                </fieldset>
-            </form>
+            <div id="auth-gated">
+                <h2 id="manage-projects">Your projects</h2>
+                <form id="new-project-form" class="bl-form">
+                    <fieldset>
+                        <legend>Create a new project</legend>
+                        <input required id="new-proj-name" type="text" autocomplete="off"
+                            placeholder="Enter new project name">
+                        <input required id="seed-phrase" type="text" placeholder="Enter Crust seed phrase">
+                        <input type="submit" value="Create">
+                    </fieldset>
+                </form>
+                <details id="project-spoiler">
+                    <summary>Projects</summary>
+                    <ul id="project-list"></ul>
+                </details>
+                <h2 id="buckets">Buckets</h2>
+                <form id="new-bucket-form" class="bl-form">
+                    <fieldset>
+                        <legend>Create a new bucket</legend>
 
-            <form id='new-file-form' enctype="multipart/form-data" class="bl-form" method="POST">
-                <fieldset>
-                    <legend>Upload a file to an existing bucket</legend>
-                    <input required type="text" id="bucket-id" name="bucket" placeholder="Bucket ID">
-                    <input required type="text" id="file-form-project-id" name="project" placeholder="Project ID">
-                    <input required type="text" id="file-name" name="file-name" placeholder="Enter File Name">
-                    <input required type="file" id="to-upload" name="file">
-                    <input type="submit" value="Upload">
-                </fieldset>
-            </form>
+                        <select required id="bucket-form-project-id">
+                            <option selected disabled>Select project ID</option>
+                        </select>
+                        <input required id="new-bucket-name" autocomplete="off" type="text"
+                            placeholder="Enter new bucket name">
+                        <input type="submit" value="Create">
+                    </fieldset>
+                </form>
 
+                <form id='new-file-form' enctype="multipart/form-data" class="bl-form" method="POST">
+                    <fieldset>
+                        <legend>Upload a file to an existing bucket</legend>
+                        <select required id="file-form-project-id">
+                            <option selected disabled>Select project</option>
+                        </select>
+                        <select required id="bucket-id">
+                            <option selected disabled>Select bucket</option>
+                        </select>
+                        <input required type="text" autocomplete="off" id="file-name" name="file-name"
+                            placeholder="Enter name for file">
+                        <label for="to-upload">Choose a file</label>
+                        <input required type="file" id="to-upload" name="file">
+                        <input type="submit" value="Upload">
+                    </fieldset>
+                </form>
+                <form id='view-bucket-form' class="bl-form">
+                    <fieldset>
+                        <legend>View bucket contents</legend>
+                        <select required id="view-bucket-project-dropdown">
+                            <option selected disabled>Select project</option>
+                        </select>
+                        <select required id="view-bucket-bucket-dropdown">
+                            <option selected disabled>Select bucket</option>
+                        </select>
+                        <input type="submit" value="View">
+                    </fieldset>
+                </form>
+
+                <details id="bucket-spoiler">
+                    <summary>Bucket contents</summary>
+                    <ul id="bucket-contents"></ul>
+                </details>
+            </div>
         </div>
     </div>
 
