@@ -17,21 +17,52 @@ const web3signIn = document.querySelector("#web3-sign-in");
 const viewBucketProjectDropdown = document.querySelector('#view-bucket-project-dropdown');
 const viewBucketBucketDropdown = document.querySelector('#view-bucket-bucket-dropdown');
 const viewBucketForm = document.querySelector('#view-bucket-form');
+const CONTRACT_ADDRESS = '0x70AaCa25F7124b4f79f3a9fa64E92a99282306E5';
+const ABI_PATH = '/abi/Payment.json';
+const getPolygonClientForm = document.querySelector('#get-polygon-clients-form');
+const addPolygonClientForm = document.querySelector('#add-polygon-client-form');
+const loadOrbitForm = document.querySelector("#load-orbit-form");
+const loadOrbitDropdown = document.querySelector("#load-orbit-project-dropdown");
 
 web3signIn.addEventListener("click", async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const addrElem = document.getElementById("eth-address");
-    addrElem.innerHTML = address.slice(0, 7) + "..." + address.slice(address.length - 3);
-    addrElem.title = address;
+    let address;
+    if (localStorage.getItem('address')) {
+        address = localStorage.getItem('address');
+    }
+    else {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        address = await signer.getAddress();
+        const addrElem = document.getElementById("eth-address");
+        addrElem.innerHTML = address.slice(0, 7) + "..." + address.slice(address.length - 3);
+        addrElem.title = address;
+        localStorage.setItem('address', address);
+    }
 
     document.querySelector('#auth-gate').style.display = 'none';
     document.querySelector('#auth-gated').style.display = 'block';
 
     web3signIn.innerHTML = 'Signed In';
+    window.address = address;
+    window.contract = await connectContract();
 });
+
+const connectContract = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+
+    const abi = await fetch(ABI_PATH).then((v) => v.json());
+
+    const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        abi.abi,
+        signer
+    );
+
+    return contract;
+}
 
 newProjForm.onsubmit = async e => {
     e.preventDefault();
@@ -102,6 +133,7 @@ const loadProjects = async () => {
         createOption(proj.name, bucketProjectId, proj.id);
         createOption(proj.name, projectIdField, proj.id);
         createOption(proj.name, viewBucketProjectDropdown, proj.id);
+        createOption(proj.name, loadOrbitDropdown, proj.id);
         pList.appendChild(elem);
     })
 
@@ -151,3 +183,39 @@ const jsonRequest = (url, data, method = "POST") => {
         body: method === 'HEAD' || method === 'GET' ? undefined : JSON.stringify(data),
     }).then(response => response.json());
 };
+
+getPolygonClientForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const values = await window.contract.getAllClients(window.address);
+    const list = document.querySelector('#clients-list');
+    list.innerHTML = '';
+    values.forEach((value) => {
+        const elem = document.createElement('li');
+        elem.innerHTML = value;
+        list.appendChild(elem);
+    })
+}
+
+addPolygonClientForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const idField = document.querySelector("#client-id");
+    const other = idField.value;
+    const mine = window.address;
+
+    await window.contract.addClient(mine, other, 1).then(async () => {
+        await cfa.message("Added successfully!");
+    }); // tier 1 for testing
+}
+
+loadOrbitForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const table = document.querySelector('table');
+    const entries = (await jsonRequest(`/api/projects/${loadOrbitDropdown.value}/kv`, {}, 'GET')).all;
+    const list = document.querySelector("#keyval-list");
+    list.innerHTML = '';
+    Object.entries(entries).forEach(([key, val]) => {
+        const elem = document.createElement('li');
+        elem.innerHTML = `${key}: ${val}`;
+        list.appendChild(elem);
+    })
+}

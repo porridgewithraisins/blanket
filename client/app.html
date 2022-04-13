@@ -111,6 +111,34 @@
                 <p>
                     Find the ABI <a href="/abi/Payment.json">here</a>.
                 </p>
+                <form id="add-polygon-client-form" class="bl-form">
+                    <fieldset>
+                        <legend>Add client</legend>
+                        <input type="text" required id="client-id" placeholder="Client" validate="0x[a-zA-Z0-9]{40}">
+                        <input type="submit" value="Add">
+                    </fieldset>
+                </form>
+
+                <form id="get-polygon-clients-form" class="bl-form">
+                    <fieldset>
+                        <legend>View clients</legend>
+                        <ul id="clients-list"></ul>
+                        <input type="submit" value="Get Clients">
+                    </fieldset>
+                </form>
+
+                <h2>Orbit status</h2>
+                <p>Orbit database configured.</p>
+                <form id='load-orbit-form' class="bl-form">
+                    <fieldset>
+                        <legend>View Orbit key-value pairs</legend>
+                        <select required id="load-orbit-project-dropdown">
+                            <option selected disabled>Select project</option>
+                        </select>
+                        <input type="submit" value="View">
+                        <ul id="keyval-list"> </ul>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
