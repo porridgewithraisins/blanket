@@ -16,27 +16,26 @@ const toUpload = document.querySelector("#to-upload");
 const web3signIn = document.querySelector("#web3-sign-in");
 
 web3signIn.addEventListener("click", async () => {
-
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
-    document.getElementById("address").innerHTML = address;
+    document.getElementById("eth-address").innerHTML = address;
 });
 
 newProjForm.onsubmit = async e => {
     e.preventDefault();
-    const result = await jsonRequest("/", {
+    const result = await jsonRequest("/api/projects", {
         name: newProjName.value,
         seed_phrase: seedPhrase.value,
     });
 
-    cfa.message(`Created project with id ${result.id} 🎉`);
+    await cfa.message(`Created project with id ${result.id} 🎉`);
 };
 
 newBucketForm.onsubmit = async e => {
     e.preventDefault();
-    const path = `/${bucketProjectId.value}`;
+    const path = `/api/projects/${bucketProjectId.value}/buckets`;
     const result = await jsonRequest(path, {
         name: newBucketName.value,
     });
@@ -47,7 +46,7 @@ newBucketForm.onsubmit = async e => {
 newFileForm.onsubmit = async e => {
     e.preventDefault();
 
-    const path = `/${projectIdField.value}/${bucketIdField.value}`;
+    const path = `/api/projects/${projectIdField.value}/buckets/${bucketIdField.value}`;
     const file = toUpload.files[0];
     const data = new FormData();
     data.append("file", file);
@@ -56,11 +55,47 @@ newFileForm.onsubmit = async e => {
     cfa.message(`Uploaded file. You can view it at ipfs://${cid}`);
 };
 
-window.addEventListener("DOMContentLoaded", () => {
+projectIdField.onchange = async () => {
+    const buckets = await jsonRequest(`/api/projects/${projectIdField.value}/buckets`, {}, 'GET');
+    buckets.forEach((bucket) => {
+        const elem = document.createElement('option');
+        elem.innerHTML = bucket.name;
+        elem.value = bucket.id;
+        bucketIdField.appendChild(elem);
+    })
+}
+
+const loadProjects = async () => {
+    const projects = await jsonRequest('/api/projects', {}, 'GET');
+    const pList = document.querySelector('#project-list');
+    pList.innerHTML = '';
+    projects.forEach((proj) => {
+        const elem = document.createElement('li');
+        elem.innerHTML = `
+        <h3>${proj.name}</h3>
+        <ul>
+            <li>ID: ${proj.id}</li>
+        </ul>
+        `;
+        const opt = document.createElement('option');
+        opt.text = proj.name;
+        opt.value = proj.id;
+        const opt1 = document.createElement('option');
+        opt1.text = proj.name;
+        opt1.value = proj.id;
+        bucketProjectId.appendChild(opt1);
+        projectIdField.appendChild(opt);
+        pList.appendChild(elem);
+    })
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
     hamburger.addEventListener("click", () => {
         if (window.getComputedStyle(nav).display === "none") nav.style.display = "flex";
         else nav.style.display = "none";
     });
+
+    loadProjects();
 });
 
 window.addEventListener("resize", () => {
@@ -74,6 +109,6 @@ const jsonRequest = (url, data, method = "POST") => {
             "Content-Type": "application/json",
             Accept: "application/json",
         },
-        body: JSON.stringify(data),
+        body: method === 'HEAD' || method === 'GET' ? undefined : JSON.stringify(data),
     }).then(response => response.json());
 };
