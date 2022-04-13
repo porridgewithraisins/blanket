@@ -4,35 +4,38 @@
  * kv put
  * kv delete
  */
-const { repo } = require('../orbit');
+const { repo } = require("../orbit");
 
 module.exports.createDb = async (req, res, next) => {
     const { project_id } = req.params;
     await repo.init(project_id);
     res.send({ msg: "OK" });
-}
-module.exports.kvGet = (req, res, next) => {
+};
+module.exports.kvGet = async (req, res, next) => {
+    if (!repo.inited) await repo.init();
     const db = repo.getDb(req.params.project_id);
     const { key } = req.params;
     res.send({
-        val: db.get(key)
+        val: db.get(key),
     });
-}
+};
 module.exports.kvPut = async (req, res, next) => {
+    if (!repo.inited) await repo.init();
     const db = repo.getDb(req.params.project_id);
     const { key, val } = req.body;
     await db.put(key, val);
     res.send({ msg: "OK" });
-
-}
+};
 module.exports.kvDel = async (req, res, next) => {
+    if (!repo.inited) await repo.init();
     const db = repo.getDb(req.params.project_id);
     const { key } = req.params;
     const mh = await db.del(key);
     res.send({ msg: "OK", mh });
-}
+};
 
 module.exports.kvAll = (req, res, next) => {
+    if (!repo.inited) await repo.init();
     const db = repo.getDb(req.params.project_id);
     res.send({ all: db.all });
-}
+};
