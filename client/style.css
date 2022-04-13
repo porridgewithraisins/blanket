@@ -89,17 +89,102 @@ a:visited {
     color: inherit;
 }
 
+legend {
+    font-weight: bold;
+}
+
 form.bl-form {
     display: flex;
     flex-direction: column;
-    max-width: 45ch;
+    max-width: 60ch;
     margin: 1rem;
+}
+
+form.bl-form>fieldset {
+    min-width: 40ch;
 }
 
 form.bl-form>fieldset>* {
     margin: 0.5rem;
-    font-size: 17.5px;
+    font-size: 1.15rem;
     display: block;
+}
+
+input[type=text],
+select {
+    border: 2px solid transparent;
+    color: white;
+    background-color: transparent;
+    border-bottom: 2px solid gray;
+    padding: 0.4rem;
+}
+
+option {
+    color: initial;
+}
+
+input[type=text]:focus,
+select:focus,
+input[type=submit][type=submit]:focus {
+    border: 2px solid white;
+    outline: none;
+}
+
+input[type=submit][type=submit] {
+    background-color: transparent;
+    border: 2px solid grey;
+    color: white;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 2rem;
+    padding: 0.4rem;
+}
+
+input[type=file] {
+    height: 0;
+    opacity: 0;
+}
+
+label[for="to-upload"] {
+    font-family: inherit;
+    width: 20ch;
+    text-align: center;
+    background-color: gray;
+    padding: 0.75rem;
+}
+
+label.has-file {
+    background-color: white;
+    color: black;
+}
+
+h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media not all and (hover: none) {
+    label[for="to-upload"]:hover:not(.has-file) {
+        background-color: #999;
+    }
+
+    input[type=submit]:hover {
+        border-color: #aaa;
+    }
+
+    label[for="to-upload"]:hover {
+        cursor: pointer;
+    }
+
+
+    input[type=text]:hover,
+    select:hover {
+        border-bottom-color: #aaa;
+    }
+
+    select:hover {
+        cursor: pointer;
+    }
 }
 
 @media screen and (max-aspect-ratio: 1/1) {
