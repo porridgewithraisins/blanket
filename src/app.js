@@ -10,6 +10,7 @@ const {
 } = require("./routes/project");
 const { createBucket, deleteBucket, updateBucket, allBuckets, readBucket } = require("./routes/buckets");
 const { Router } = require("express");
+const { kvAll, kvGet, kvPut, kvDel } = require("./routes/orbit");
 
 const app = express();
 
@@ -37,10 +38,10 @@ projectRouter
 
     .post("/:project_id/buckets/:bucket_id", addFile)
 
-    .get("/:project_id/kv")
-    .get("/:project_id/kv/:key")
-    .put("/:project_id/kv") //{ key, value }
-    .delete("/:project_id/kv/:key");
+    .get("/:project_id/kv", kvAll)
+    .get("/:project_id/kv/:key", kvGet)
+    .put("/:project_id/kv", kvPut) //{ key, value }
+    .delete("/:project_id/kv/:key", kvDel);
 
 app.use("/api/projects", projectRouter);
 
