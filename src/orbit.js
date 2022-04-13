@@ -11,6 +11,7 @@ class Repository {
 
     async init(projectId) {
         this.dbs[projectId] = await this.orbit.keyvalue(`${projectId}`);
+        this.inited = true;
     }
 
     getDb(projectId) {
