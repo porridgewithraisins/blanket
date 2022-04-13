@@ -27,6 +27,9 @@ web3signIn.addEventListener("click", async () => {
     addrElem.innerHTML = address.slice(0, 7) + "..." + address.slice(address.length - 3);
     addrElem.title = address;
 
+    document.querySelector('#auth-gate').style.display = 'none';
+    document.querySelector('#auth-gated').style.display = 'block';
+
     web3signIn.innerHTML = 'Signed In';
 });
 
@@ -101,6 +104,8 @@ const loadProjects = async () => {
         createOption(proj.name, viewBucketProjectDropdown, proj.id);
         pList.appendChild(elem);
     })
+
+    document.querySelector("#project-spoiler").setAttribute('open', true);
 }
 
 viewBucketProjectDropdown.onchange = async () => {
@@ -116,9 +121,11 @@ viewBucketForm.onsubmit = async (e) => {
     bucketContents.innerHTML = '';
     files.forEach((file) => {
         const elem = document.createElement('li');
-        elem.innerHTML = `<b>${file.name}</b> (ID: ${file.id}) <a href="https://ipfs.io/ipfs/${file.cid}/">View</a>`;
+        elem.innerHTML = `<b>${file.name}</b> (ID: ${file.id}) <a target="_blank" href="https://ipfs.io/ipfs/${file.cid}/">View</a>`;
         bucketContents.appendChild(elem);
     })
+
+    document.querySelector("#bucket-spoiler").setAttribute('open', true);
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
