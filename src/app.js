@@ -16,7 +16,7 @@ const {
     readBucket,
 } = require("./routes/buckets");
 const { Router } = require("express");
-const { kvAll, kvGet, kvPut, kvDel } = require("./routes/orbit");
+const { kvAll, kvGet, kvPut, kvDel, createDb } = require("./routes/orbit");
 
 const app = express();
 
@@ -44,6 +44,7 @@ projectRouter
 
     .post("/:project_id/buckets/:bucket_id", upload.single("file"), addFile)
 
+    .post("/:project_id/kv", createDb)
     .get("/:project_id/kv", kvAll)
     .get("/:project_id/kv/:key", kvGet)
     .put("/:project_id/kv", kvPut) //{ key, value }
