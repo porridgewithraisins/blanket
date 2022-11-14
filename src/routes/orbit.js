@@ -8,7 +8,7 @@ const { repo } = require("../orbit");
 
 module.exports.createDb = async (req, res, next) => {
     const { project_id } = req.params;
-    await repo.init(project_id).catch(noop => noop);
+    await repo.init(project_id).catch(console.log);
     res.send({ msg: "OK" });
 };
 module.exports.kvGet = async (req, res, next) => {

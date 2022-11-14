@@ -14,13 +14,8 @@ export default function ContactBook() {
         setContacts(contacts);
     };
 
-    const initDb = async () => {
-        const url = "http://localhost:3000/api/projects/1/kv";
-        await fetch(url, { method: "POST" });
-    };
-
     useEffect(() => {
-        initDb().then(() => getContacts());
+        getContacts();
     }, []);
 
     const uploadContact = async (contact: IContact) => {
