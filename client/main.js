@@ -1,5 +1,5 @@
 import cfa from "https://esm.sh/cf-alert";
-import { ethers } from "https://esm.sh/ethers";
+import { ethers } from "https://cdn-cors.ethers.io/lib/ethers-5.5.4.esm.min.js";
 
 const hamburger = document.querySelector("#hamburger");
 const nav = document.querySelector("nav");
@@ -118,7 +118,7 @@ projectIdField.onchange = async () => {
 const createOption = (name, dropdown, value) => {
     const opt = document.createElement('option');
     opt.innerHTML = name;
-    opt.value = value;
+    opt.value = name;
     dropdown.appendChild(opt);
     return opt;
 }
@@ -153,7 +153,7 @@ viewBucketForm.onsubmit = async (e) => {
     bucketContents.innerHTML = '';
     files.forEach((file) => {
         const elem = document.createElement('li');
-        elem.innerHTML = `<b>${file.name}</b> (ID: ${file.id}) <a target="_blank" href="https://ipfs.io/ipfs/${file.cid}/">View</a>`;
+        elem.innerHTML = `<b>${file.name}</b> (ID: ${file.id}) <a target="_blank" href="ipfs://${file.cid}/">View</a>`;
         bucketContents.appendChild(elem);
     })
 
@@ -186,6 +186,7 @@ const jsonRequest = (url, data, method = "POST") => {
 
 getPolygonClientForm.onsubmit = async (e) => {
     e.preventDefault();
+
     const values = await window.contract.getAllClients(window.address);
     const list = document.querySelector('#clients-list');
     list.innerHTML = '';
@@ -210,6 +211,7 @@ addPolygonClientForm.onsubmit = async (e) => {
 loadOrbitForm.onsubmit = async (e) => {
     e.preventDefault();
     const table = document.querySelector('table');
+    console.log(loadOrbitDropdown.value);
     const entries = (await jsonRequest(`/api/projects/${loadOrbitDropdown.value}/kv`, {}, 'GET')).all;
     const list = document.querySelector("#keyval-list");
     list.innerHTML = '';

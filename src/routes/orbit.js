@@ -21,6 +21,7 @@ module.exports.kvGet = async (req, res, next) => {
 module.exports.kvPut = async (req, res, next) => {
     const db = repo.getDb(req.params.project_id);
     const { key, val } = req.body;
+    console.log(req.body);
     await db.put(key, val);
     res.send({ msg: "OK" });
 };
@@ -33,5 +34,11 @@ module.exports.kvDel = async (req, res, next) => {
 
 module.exports.kvAll = async (req, res, next) => {
     const db = repo.getDb(req.params.project_id);
-    res.send({ all: db.all });
+    console.log(db)
+    try {
+        res.send({ all: db.all });
+    } catch (e) {
+        console.error(e);
+        res.send({ all: null })
+    }
 };

@@ -5,8 +5,8 @@ export default function ContactBook() {
     const [contacts, setContacts] = useState<IContact[]>([]);
 
     const getContacts = async () => {
-        const url = "http://localhost:3000/api/projects/1/kv";
-        const { all } = await fetch(url).then(res => res.json());
+        const url = "http://localhost:3000/api/projects/p/kv";
+        const { all } = await fetch(url).then((res) => res.json());
         const contacts = Object.entries(all).map(([name, phone]) => ({
             name,
             phone,
@@ -55,7 +55,11 @@ function Contact({ contact }: { contact: IContact }) {
     );
 }
 
-function ContactForm({ addContact }: { addContact: (contact: IContact) => void }) {
+function ContactForm({
+    addContact,
+}: {
+    addContact: (contact: IContact) => void;
+}) {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
 
@@ -72,13 +76,13 @@ function ContactForm({ addContact }: { addContact: (contact: IContact) => void }
                 type="text"
                 placeholder="Name"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
             />
             <input
                 type="text"
                 placeholder="Phone"
                 value={phone}
-                onChange={e => setPhone(e.target.value)}
+                onChange={(e) => setPhone(e.target.value)}
             />
             <button type="submit">Add Contact</button>
         </form>
